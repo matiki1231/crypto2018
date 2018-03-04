@@ -1,3 +1,5 @@
+# License
+
 The MIT License
 
 Copyright (c) 2018 Mateusz Błażejewski
