@@ -17,22 +17,6 @@ object MissingBit {
     override def guessValue: Int = 1
   }
 
-  object Known {
-
-    def apply(value: Int): MissingBit =
-      value match {
-        case 0 => Zero
-        case 1 => One
-      }
-
-    def unapply(missingBit: MissingBit): Option[Int] =
-      missingBit match {
-        case Zero => Some(0)
-        case One => Some(1)
-        case Unknown => None
-      }
-  }
-
   case object Unknown extends MissingBit {
 
     override def guessValue: Int = (math.random() * 2).toInt
@@ -43,8 +27,8 @@ object MissingBit {
       case (_, _, One) => (One, One, Zero)
       case (_, One, Zero) => (Zero, One, One)
       case (One, _, Zero) => (One, Zero, One)
-      case (v, Zero, Zero) => (v, Zero, Zero)
-      case (Zero, v, Zero) => (Zero, v, One)
+      case (v, Zero, Zero) => (v, Zero, v)
+      case (v, Unknown, Zero) => (v, Unknown, Unknown)
     }
   }
 }

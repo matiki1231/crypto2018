@@ -26,7 +26,8 @@ class GlibcGeneratorCracker {
       feedback1Lsb <- missingBits((counter + 341) % 344)
       result <- state(counter % 344)
     } yield {
-      val carry = if (result != ((feedback0 + feedback1) & 0xFFFFFFFF)) MissingBit.One else MissingBit.Zero
+
+      val carry = if (next != (((feedback0 + feedback1) >> 1) & 0x7FFFFFFF)) MissingBit.One else MissingBit.Zero
       val (lsb0, lsb1, lsbr) = MissingBit.add(feedback0Lsb, feedback1Lsb, carry)
 
       missingBits((counter + 313) % 344) = Some(lsb0)

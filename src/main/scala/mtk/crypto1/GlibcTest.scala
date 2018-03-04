@@ -6,7 +6,7 @@ object GlibcTest extends App {
   glibcg.init(21)
 
   val glibcgc = new GlibcGeneratorCracker
-  
+
   println("GENERATOR\t\tCRACKER\t\tRESULT")
 
   for (i <- 1 to 1000) {
