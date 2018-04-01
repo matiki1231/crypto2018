@@ -3,7 +3,7 @@ package mtk.otpcracker
 import scala.annotation.tailrec
 
 object Main extends App {
-  val charset = ' ' to '~' //('0' to '9') ++ ('a' to 'z') ++ ('A' to 'Z') ++ Seq(' ', ',', '.', ''', '=')//, '-', '!', '?', '$', ':', '(', ')', '$')
+  val charset = ('0' to '9') ++ ('a' to 'z') ++ ('A' to 'Z') ++ Seq(' ', ',', '.', ''')//, '-', '!', '?', '$', ':', '(', ')', '$')
   val xorLookup = (for {
     c0 <- charset
     c1 <- charset
@@ -20,8 +20,6 @@ object Main extends App {
 
     aux(xss, Seq()).reverse
   }
-
-  val key = "xyz"
 
   val cs = """7E23AAE32FA0A7A88EE51A18F02FC1CB78A8987CDEBB26A990B39DE31A9DB15B38B9B7C95E3AFC7C89746A1679A84025B1889C9F22D6C92106AF0D54E4D7607779EF7E19C89AED8CD1B9
              |6409C7D508E182B78EF4175DB52085FD6BBD892A9B9871E8ABBFD9E11480F5573AB4F8DE5F37FC7CAD2D391B69E2056DBDDBCF9A3A9AC37443EF1154F4DD392316A21C15A6B8CAA5B89B2FD6C0BD49643ED80EC46D97207A8943EB94D99A5B7CC3257CF3B4C31574A023CC671A846F5B47282B682211E2F802711E89FE44BA342B6496627693BEB927357CB03C362520790489
@@ -48,6 +46,12 @@ object Main extends App {
     .map {
       _.trim().sliding(2, 2).map(Integer.parseInt(_, 16)).toSeq
     }.toSeq
+
+  val thirdLine = "[To JULIET] If I profane with my unworthiest hand This holy shrine, the gentle fine is this: My lips, two blushing pilgrims, ready stand To smooth that rough touch with a tender kiss."
+
+  val key = cs(2).zip(thirdLine).map({ case (c0, c1) => c0 ^ c1 })
+
+  for (c <- cs) println(c.zip(key).map({ case (c0, c1) => (c0 ^ c1).toChar }).mkString)
 
   def xyz[A](s0: Seq[(A, A)], s1: Seq[(A, A)]): (Seq[(A, A)], Seq[(A, A)]) = {
     val intersect = (s0.map(_._2) intersect s1.map(_._1)).toSet
@@ -82,7 +86,7 @@ object Main extends App {
 
     val decoders = transposedCiphertexts.map(tryDecode(_, xorLookup))
 
-    decoders.foreach(println(_))
+//    decoders.foreach(println(_))
 
     ciphertexts.map { ciphertext =>
       (ciphertext zip decoders).map({ case (c, d) =>
@@ -111,5 +115,5 @@ object Main extends App {
   }
 
 //  println(tryGuessKey(cs, xorLookup).mkString("\n"))
-  println(tryDecodeAll(cs, xorLookup).mkString("\n"))
+//  println(tryDecodeAll(cs, xorLookup).mkString("\n"))
 }

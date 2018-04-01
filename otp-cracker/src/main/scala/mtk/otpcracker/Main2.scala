@@ -2,6 +2,8 @@ package mtk.otpcracker
 
 import java.io.File
 
+import cats.effect.IO
+import mtk.otpcracker.ui.ConsoleUI
 import scopt.OptionParser
 
 
@@ -20,8 +22,10 @@ object Main2 extends App {
     help("help").text("prints this usage text")
   }
 
+  import mtk.lang.impl.StdIO._
+
   ArgsParser.parse(args, Args()) match {
-    case Some(parsedArgs) => ???
+    case Some(parsedArgs) => ConsoleUI.get[IO].unsafeRunSync()
     case None => ArgsParser.showUsage()
   }
 }
